@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Node.js + Express
 on:
   push:
     branches:
-      - master # Trigger the pipeline on push to the master branch
+      - pratiksha # Trigger the pipeline on push to the master branch
 
 jobs:
   build:
