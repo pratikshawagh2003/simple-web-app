@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Node.js + Express
 on:
   push:
     branches:
-      - master  # Trigger the pipeline on push to the master branch
+      - main  # Trigger the pipeline on push to the main branch (or adjust to your default branch)
 
 jobs:
   build:
@@ -35,6 +35,10 @@ jobs:
     - name: Run Docker container
       run: |
         docker run -d -p 3000:3000 simple-web-app
+
+    - name: Wait for Docker container to be ready (optional)
+      run: |
+        sleep 10  # Wait for the container to start, adjust this if necessary
 
     - name: Verify if app is running
       run: |
