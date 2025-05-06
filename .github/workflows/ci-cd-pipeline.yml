@@ -1,0 +1,47 @@
+name: CI/CD Pipeline for Node.js + Express
+
+on:
+  push:
+    branches:
+      - master # Trigger the pipeline on push to the master branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Run tests (optional)
+        run: |
+          # You can write your test commands here, for example:
+          # npm test
+          echo "No tests added yet"
+
+      - name: Build Docker image
+        run: |
+          docker build -t simple-web-app .
+
+      - name: Run Docker container
+        run: |
+          docker run -d -p 3000:3000 simple-web-app
+
+      - name: Verify if app is running
+        run: |
+          curl -f http://localhost:3000 || exit 1
+
+      - name: Push Docker image to Docker Hub (Optional)
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker tag simple-web-app ${{ secrets.DOCKER_USERNAME }}/simple-web-app:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/simple-web-app:latest
