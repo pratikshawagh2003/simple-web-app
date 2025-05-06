@@ -3,7 +3,7 @@ name: CI/CD Pipeline for Node.js + Express
 on:
   push:
     branches:
-      - pratiksha # Trigger the pipeline on push to the master branch
+      - pratiksha # Your actual branch name
 
 jobs:
   build:
@@ -19,26 +19,23 @@ jobs:
           node-version: "14"
 
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
 
       - name: Run tests (optional)
         run: |
-          # You can write your test commands here, for example:
-          # npm test
           echo "No tests added yet"
 
       - name: Build Docker image
-        run: |
-          docker build -t simple-web-app .
+        run: docker build -t simple-web-app .
 
       - name: Run Docker container
-        run: |
-          docker run -d -p 3000:3000 simple-web-app
+        run: docker run -d -p 3000:3000 --name simple-web-app simple-web-app
+
+      - name: Wait for app to start
+        run: sleep 10
 
       - name: Verify if app is running
-        run: |
-          curl -f http://localhost:3000 || exit 1
+        run: curl -f http://localhost:3000 || exit 1
 
       - name: Push Docker image to Docker Hub (Optional)
         run: |
